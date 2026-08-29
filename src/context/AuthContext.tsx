@@ -22,15 +22,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const DEMO_USER: UserProfile = {
   id: 'usr-demo-01',
-  email: 'director@agency.com.au',
-  name: 'Lachlan Vance',
-  role: 'Lead Digital Strategist',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+  email: 'hello@stoiclabs.dev',
+  name: 'Nitin Upadhyaya',
+  role: 'Founder & Digital Lead',
+  avatar: '/nitin-avatar.jpg'
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(() => {
-    const saved = localStorage.getItem('medlead_active_user');
+    const saved = localStorage.getItem('medlead_active_user_v2');
     return saved ? JSON.parse(saved) : DEMO_USER;
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             role: 'Agency Member'
           };
           setUser(profile);
-          localStorage.setItem('medlead_active_user', JSON.stringify(profile));
+          localStorage.setItem('medlead_active_user_v2', JSON.stringify(profile));
           return { success: true };
         }
       }
@@ -99,10 +99,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: `usr-${Date.now()}`,
         email: email || DEMO_USER.email,
         name: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, c => c.toUpperCase()) || DEMO_USER.name,
-        role: 'Lead Digital Strategist'
+        role: 'Founder & Digital Lead',
+        avatar: '/nitin-avatar.jpg'
       };
       setUser(demoProfile);
-      localStorage.setItem('medlead_active_user', JSON.stringify(demoProfile));
+      localStorage.setItem('medlead_active_user_v2', JSON.stringify(demoProfile));
       return { success: true };
     } catch (err: any) {
       return { success: false, error: err.message || 'Failed to authenticate' };
@@ -120,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
     setUser(null);
-    localStorage.removeItem('medlead_active_user');
+    localStorage.removeItem('medlead_active_user_v2');
   };
 
   return (

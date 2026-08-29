@@ -162,18 +162,16 @@ export function Sidebar() {
         {/* User Card */}
         <div className="flex items-center gap-3 px-1 py-1">
           <div className="w-8 h-8 rounded-full bg-slate-700 overflow-hidden border border-slate-600 shrink-0">
-            {user?.avatar ? (
-              <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center font-bold text-xs text-white bg-blue-600">
-                {user?.name?.charAt(0) || 'A'}
-              </div>
-            )}
+            <img 
+              src={user?.avatar || '/nitin-avatar.jpg'} 
+              alt={user?.name || 'Nitin Upadhyaya'} 
+              className="w-full h-full object-cover" 
+            />
           </div>
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-white truncate">{user?.name || 'Medical Agent'}</p>
-              <p className="text-[10px] text-slate-400 truncate">{user?.email || 'director@agency.com.au'}</p>
+              <p className="text-xs font-semibold text-white truncate">{user?.name || 'Nitin Upadhyaya'}</p>
+              <p className="text-[10px] text-slate-400 truncate">{user?.email || 'hello@stoiclabs.dev'}</p>
             </div>
           )}
         </div>
