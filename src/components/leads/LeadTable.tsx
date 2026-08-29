@@ -16,11 +16,13 @@ import {
   SlidersHorizontal,
   Mail,
   Phone,
-  Check
+  Check,
+  Edit3
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
 import { getLeadScoreBadge, getWebsiteStatusBadge, getPipelineStatusBadge } from '../../services/auditCalculator';
-import { SortField } from '../../types';
+import { SortField, LeadFull } from '../../types';
+import { EditHospitalModal } from '../modals/EditHospitalModal';
 
 export function LeadTable() {
   const { 
@@ -50,6 +52,7 @@ export function LeadTable() {
     actions: true
   });
   const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
+  const [editingHospital, setEditingHospital] = useState<LeadFull | null>(null);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -388,6 +391,13 @@ export function LeadTable() {
                         <td className="py-3.5 px-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1.5">
                             <button
+                              onClick={() => setEditingHospital(lead)}
+                              className="p-1 rounded-md hover:bg-[#EFF6FF] text-[#64748B] hover:text-[#2563EB] transition-colors"
+                              title="Edit facility profile & mail address"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
                               onClick={() => openLeadDetail(b.id)}
                               className="p-1 rounded-md hover:bg-[#F1F5F9] text-[#64748B] hover:text-[#2563EB] transition-colors"
                               title="View dossier"
@@ -468,6 +478,13 @@ export function LeadTable() {
         </div>
 
       </div>
+
+      {/* Edit Hospital / Lead Modal */}
+      <EditHospitalModal
+        isOpen={Boolean(editingHospital)}
+        onClose={() => setEditingHospital(null)}
+        lead={editingHospital}
+      />
 
     </div>
   );

@@ -45,7 +45,7 @@ export function WebsiteAuditHubView() {
   const outdatedCount = leads.filter(l => l.digital_presence.website_status === 'Severely Outdated' || l.digital_presence.website_status === 'Needs Improvement').length;
 
   return (
-    <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
+    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Header Banner */}
       <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">

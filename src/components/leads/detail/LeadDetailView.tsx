@@ -203,7 +203,7 @@ export function LeadDetailView() {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-[1500px] mx-auto">
+    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1500px] mx-auto">
       
       {/* Back to Leads Navigation Bar */}
       <div className="flex items-center justify-between">
@@ -523,39 +523,47 @@ export function LeadDetailView() {
             </div>
 
             {/* Business Profile Details */}
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-subtle space-y-4">
-              <h3 className="font-bold text-sm text-slate-900 dark:text-white">Business Information</h3>
+            <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-xs space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-sm text-[#0F172A]">Business Information</h3>
+                <button
+                  onClick={() => setIsEditHospitalOpen(true)}
+                  className="text-xs text-[#2563EB] hover:text-[#1D4ED8] font-bold flex items-center gap-1 hover:underline"
+                >
+                  <Edit className="w-3.5 h-3.5" /> Edit Profile & Address
+                </button>
+              </div>
               
               {b.description && (
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                <p className="text-xs text-[#475569] leading-relaxed bg-[#F8FAFC] p-3 rounded-lg border border-[#E2E8F0]">
                   {b.description}
                 </p>
               )}
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Category</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.business_type}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">Category</span>
+                  <p className="font-semibold text-[#0F172A]">{b.business_type}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Subcategory</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.subcategory || 'General'}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">Subcategory</span>
+                  <p className="font-semibold text-[#0F172A]">{b.subcategory || 'General'}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Ownership</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.ownership_type}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">Ownership</span>
+                  <p className="font-semibold text-[#0F172A]">{b.ownership_type}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Provider Number</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.provider_number || 'N/A'}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">Provider Number</span>
+                  <p className="font-semibold text-[#0F172A]">{b.provider_number || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Phone Number</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.phone || 'N/A'}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">Phone Number</span>
+                  <p className="font-semibold text-[#0F172A]">{b.phone || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">General Email</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">{b.general_email || 'N/A'}</p>
+                  <span className="text-[#94A3B8] block mb-0.5">General Email</span>
+                  <p className="font-semibold text-[#0F172A]">{b.general_email || 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -566,14 +574,14 @@ export function LeadDetailView() {
           <div className="space-y-6">
             
             {/* Decision Makers Widget */}
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-subtle">
+            <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-xs">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-emerald-500" /> Decision Makers
+                <h3 className="font-bold text-sm text-[#0F172A] flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-[#047857]" /> Decision Makers
                 </h3>
                 <button
                   onClick={() => setIsAddDMOpen(true)}
-                  className="text-xs text-blue-600 hover:text-blue-500 font-bold flex items-center gap-1"
+                  className="text-xs text-[#2563EB] hover:text-[#1D4ED8] font-bold flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" /> Add
                 </button>
@@ -582,21 +590,30 @@ export function LeadDetailView() {
               {selectedLead.decision_makers.length > 0 ? (
                 <div className="space-y-2.5">
                   {selectedLead.decision_makers.map(dm => (
-                    <div key={dm.id} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs">
+                    <div key={dm.id} className="p-3 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] text-xs">
                       <div className="flex items-start justify-between">
                         <div>
-                          <p className="font-bold text-slate-900 dark:text-white">{dm.full_name}</p>
-                          <p className="text-slate-500 text-[11px]">{dm.position}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold text-[#0F172A]">{dm.full_name}</p>
+                            <button
+                              onClick={() => setEditingDm(dm)}
+                              className="text-[#94A3B8] hover:text-[#2563EB] transition-colors"
+                              title="Edit decision maker"
+                            >
+                              <Edit className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <p className="text-[#64748B] text-[11px]">{dm.position}</p>
                         </div>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                          dm.priority === 'Primary' ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                          dm.priority === 'Primary' ? 'bg-[#2563EB] text-white' : 'bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0]'
                         }`}>
                           {dm.priority}
                         </span>
                       </div>
                       {dm.email && (
-                        <p className="text-slate-600 dark:text-slate-300 text-[11px] mt-2 flex items-center gap-1 truncate font-mono">
-                          <Mail className="w-3 h-3 text-slate-400" /> {dm.email}
+                        <p className="text-[#475569] text-[11px] mt-2 flex items-center gap-1 truncate font-mono">
+                          <Mail className="w-3 h-3 text-[#94A3B8]" /> {dm.email}
                         </p>
                       )}
                       {dm.linkedin_url && (

@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS decision_makers (
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1400px] mx-auto">
       
       {/* Header */}
       <div className="bg-white rounded-xl p-5 border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">

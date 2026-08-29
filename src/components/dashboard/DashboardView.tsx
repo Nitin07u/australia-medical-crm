@@ -68,7 +68,7 @@ export function DashboardView() {
     .slice(0, 7);
 
   return (
-    <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
+    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1600px] mx-auto">
       
       {/* 1. 6 SaaS KPI Cards (Section 7 & 8) */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
