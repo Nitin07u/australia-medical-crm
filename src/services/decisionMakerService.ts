@@ -7,9 +7,9 @@ export function getDecisionMakers(businessId: string): DecisionMaker[] {
   return found?.decision_makers || [];
 }
 
-export function getAllDecisionMakers(): { decisionMaker: DecisionMaker; businessName: string; businessId: string; state: string }[] {
+export function getAllDecisionMakers(): { decisionMaker: DecisionMaker; businessName: string; businessId: string; state: string; businessType: string; city: string }[] {
   const leads = getAllLeads();
-  const result: { decisionMaker: DecisionMaker; businessName: string; businessId: string; state: string }[] = [];
+  const result: { decisionMaker: DecisionMaker; businessName: string; businessId: string; state: string; businessType: string; city: string }[] = [];
 
   leads.forEach(l => {
     l.decision_makers.forEach(dm => {
@@ -17,7 +17,9 @@ export function getAllDecisionMakers(): { decisionMaker: DecisionMaker; business
         decisionMaker: dm,
         businessName: l.business.business_name,
         businessId: l.business.id,
-        state: l.business.state
+        state: l.business.state,
+        businessType: l.business.business_type,
+        city: l.business.city
       });
     });
   });

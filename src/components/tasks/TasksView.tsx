@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { 
   CheckSquare, 
   Clock, 
-  Building2, 
-  MapPin, 
-  Plus, 
-  Trash2, 
   Search, 
-  Filter, 
-  ChevronRight,
+  Trash2, 
+  Check, 
+  Building2,
+  Calendar,
   AlertCircle
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
@@ -41,38 +39,38 @@ export function TasksView() {
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-card flex items-center justify-between gap-6 flex-wrap">
+      <div className="bg-white rounded-xl p-5 border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-lg font-bold text-[#0F172A] tracking-tight">
               Outreach & Research Tasks
             </h1>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
               {pendingCount} Pending Action Items
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#64748B] mt-0.5">
             Website audits, decision-maker discovery, and cold outreach follow-ups for Australian medical leads.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="relative min-w-[260px]">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search task or business name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 shadow-subtle focus:outline-none focus:border-blue-500"
+              className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg pl-9 pr-3 py-1.5 text-xs font-medium text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-[#2563EB]"
             />
           </div>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center justify-between gap-4 flex-wrap text-xs">
-        <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-subtle font-semibold">
+      <div className="flex items-center justify-between gap-4 flex-wrap bg-white p-3 rounded-xl border border-[#E2E8F0] shadow-xs text-xs">
+        <div className="flex items-center gap-1.5 font-semibold">
           {[
             { id: 'all', label: `All Tasks (${allTasks.length})` },
             { id: 'Pending', label: `Pending (${allTasks.filter(t => t.task.status === 'Pending').length})` },
@@ -82,10 +80,10 @@ export function TasksView() {
             <button
               key={tab.id}
               onClick={() => setStatusFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-xl transition-all ${
+              className={`px-3 py-1.5 rounded-md transition-all ${
                 statusFilter === tab.id
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-[#2563EB] text-white shadow-xs'
+                  : 'bg-[#F8FAFC] text-[#64748B] hover:bg-[#F1F5F9] border border-[#E2E8F0]'
               }`}
             >
               {tab.label}
@@ -94,26 +92,26 @@ export function TasksView() {
         </div>
 
         {/* Priority Filter */}
-        <div className="flex items-center gap-1.5 text-xs">
-          <span className="text-slate-400">Priority:</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[#64748B] font-medium">Priority:</span>
           {['all', 'High', 'Medium', 'Low'].map(p => (
             <button
               key={p}
               onClick={() => setPriorityFilter(p)}
-              className={`px-2.5 py-1 rounded-lg border font-semibold capitalize transition-all ${
+              className={`px-2.5 py-1 rounded-md transition-all ${
                 priorityFilter === p
-                  ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300'
+                  ? 'bg-[#0F172A] text-white font-semibold shadow-xs'
+                  : 'bg-[#F8FAFC] text-[#64748B] hover:bg-[#F1F5F9] border border-[#E2E8F0]'
               }`}
             >
-              {p}
+              {p === 'all' ? 'All' : p}
             </button>
           ))}
         </div>
       </div>
 
       {/* Task List */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-subtle divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+      <div className="space-y-3">
         {filtered.length > 0 ? (
           filtered.map(item => {
             const t = item.task;
@@ -122,71 +120,102 @@ export function TasksView() {
             return (
               <div
                 key={t.id}
-                className="p-5 flex items-center justify-between gap-4 text-xs hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors group"
+                className={`bg-white p-4 rounded-xl border border-[#E2E8F0] shadow-xs hover:border-[#CBD5E1] transition-all flex items-center justify-between gap-4 flex-wrap ${
+                  isCompleted ? 'opacity-60 bg-[#F8FAFC]' : ''
+                }`}
               >
-                <div className="flex items-start gap-3.5 min-w-0">
-                  <input
-                    type="checkbox"
-                    checked={isCompleted}
-                    onChange={(e) => updateTaskStatus(item.businessId, t.id, e.target.checked ? 'Completed' : 'Pending')}
-                    className="mt-1 rounded text-blue-600 focus:ring-blue-500 cursor-pointer w-4 h-4 shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <p className={`font-bold text-sm leading-snug ${isCompleted ? 'line-through text-slate-400' : 'text-slate-900 dark:text-white'}`}>
+                <div className="flex items-start gap-3 min-w-0 flex-1">
+                  
+                  {/* Status Toggle Checkbox */}
+                  <button
+                    onClick={() => updateTaskStatus(item.businessId, t.id, isCompleted ? 'Pending' : 'Completed')}
+                    className={`w-5 h-5 rounded-md border flex items-center justify-center mt-0.5 transition-colors shrink-0 ${
+                      isCompleted 
+                        ? 'bg-[#047857] border-[#047857] text-white' 
+                        : 'border-[#CBD5E1] bg-white hover:border-[#2563EB]'
+                    }`}
+                  >
+                    {isCompleted && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </button>
+
+                  {/* Task Content */}
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-[10px] font-bold px-2 py-0.2 rounded ${
+                        t.priority === 'High' 
+                          ? 'bg-[#FEF2F2] text-[#B91C1C] border border-[#FECACA]' 
+                          : t.priority === 'Medium'
+                          ? 'bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]'
+                          : 'bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0]'
+                      }`}>
+                        {t.priority} Priority
+                      </span>
+
+                      <span className={`text-[10px] font-semibold px-2 py-0.2 rounded-full ${
+                        isCompleted 
+                          ? 'bg-[#ECFDF5] text-[#047857]' 
+                          : t.status === 'In Progress'
+                          ? 'bg-[#EFF6FF] text-[#1D4ED8]'
+                          : 'bg-[#F1F5F9] text-[#64748B]'
+                      }`}>
+                        {t.status}
+                      </span>
+                    </div>
+
+                    <h4 className={`text-xs font-bold text-[#0F172A] ${isCompleted ? 'line-through text-[#94A3B8]' : ''}`}>
                       {t.title}
-                    </p>
+                    </h4>
+
                     {t.description && (
-                      <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{t.description}</p>
+                      <p className="text-[11px] text-[#64748B]">
+                        {t.description}
+                      </p>
                     )}
-                    
-                    {/* Linked Business Link */}
-                    <div className="flex items-center gap-3 text-[11px] text-slate-400 mt-2 flex-wrap">
+
+                    <div className="flex items-center gap-3 text-[11px] text-[#64748B] pt-0.5">
                       <span 
                         onClick={() => openLeadDetail(item.businessId)}
-                        className="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+                        className="font-semibold text-[#2563EB] hover:underline cursor-pointer flex items-center gap-1"
                       >
-                        <Building2 className="w-3.5 h-3.5" /> {item.businessName} ({item.state})
+                        <Building2 className="w-3 h-3" /> {item.businessName}
                       </span>
+
                       {t.due_date && (
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-slate-400" /> Due: {t.due_date}
+                        <span className="flex items-center gap-1 text-[#94A3B8]">
+                          <Calendar className="w-3 h-3" /> Due {t.due_date}
                         </span>
                       )}
                     </div>
                   </div>
+
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                    t.priority === 'High' 
-                      ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300' 
-                      : 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300'
-                  }`}>
-                    {t.priority}
-                  </span>
-
+                {/* Actions */}
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => openLeadDetail(item.businessId)}
-                    className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 font-semibold transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-lg bg-[#F8FAFC] hover:bg-[#EFF6FF] text-[#2563EB] text-xs font-semibold border border-[#E2E8F0] hover:border-[#BFDBFE] transition-colors"
                   >
-                    View Lead <ChevronRight className="w-3.5 h-3.5" />
+                    Open Lead
                   </button>
 
                   <button
                     onClick={() => deleteTask(item.businessId, t.id)}
-                    className="p-1.5 text-slate-400 hover:text-rose-600 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-[#FEF2F2] text-[#94A3B8] hover:text-[#B91C1C] transition-colors"
                     title="Delete task"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
+
               </div>
             );
           })
         ) : (
-          <div className="py-16 text-center text-slate-400 text-xs">
-            <CheckSquare className="w-8 h-8 mx-auto mb-2 text-slate-400 opacity-60" />
-            <p className="font-bold text-slate-700 dark:text-slate-300">No tasks found matching your filter</p>
+          <div className="py-16 text-center text-[#94A3B8] bg-white rounded-xl border border-[#E2E8F0]">
+            <CheckSquare className="w-8 h-8 mx-auto mb-2 text-[#CBD5E1]" />
+            <p className="font-semibold text-sm text-[#475569]">No tasks matching filter</p>
+            <p className="text-xs text-[#94A3B8] mt-0.5">All action items and follow-ups are clear</p>
           </div>
         )}
       </div>

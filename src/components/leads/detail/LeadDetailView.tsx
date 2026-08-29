@@ -229,51 +229,51 @@ export function LeadDetailView() {
       </div>
 
       {/* Main Profile Header Card */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-card">
+      <div className="bg-white rounded-xl p-5 border border-[#E2E8F0] shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           
           {/* Left Business Meta */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
                 {b.business_type}
               </span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0]">
                 {b.ownership_type}
               </span>
-              {b.abn && (
-                <span className="text-xs font-mono text-slate-500 bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
-                  ABN: {b.abn}
+              {b.provider_number && (
+                <span className="text-[11px] font-mono text-[#64748B] bg-[#F8FAFC] px-2 py-0.5 rounded border border-[#E2E8F0]">
+                  Provider: {b.provider_number}
                 </span>
               )}
             </div>
 
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h1 className="text-xl font-black text-[#0F172A] tracking-tight">
                 {b.business_name}
               </h1>
               <button
                 onClick={() => setIsEditHospitalOpen(true)}
-                className="px-3 py-1 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-300 font-bold text-xs flex items-center gap-1.5 transition-colors border border-blue-200/60 dark:border-blue-800/40"
+                className="px-2.5 py-1 rounded-md bg-[#F8FAFC] hover:bg-[#EFF6FF] text-[#2563EB] font-bold text-xs flex items-center gap-1.5 transition-colors border border-[#E2E8F0] hover:border-[#BFDBFE]"
               >
                 <Edit className="w-3.5 h-3.5" /> Edit Profile & Mail Address
               </button>
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+            <div className="flex items-center gap-4 text-xs text-[#64748B] flex-wrap">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                {b.address}, {b.city} <strong className="text-slate-800 dark:text-slate-200">{b.state}</strong> {b.postcode}
+                <MapPin className="w-3.5 h-3.5 text-[#94A3B8]" />
+                {b.address}, {b.city} <strong className="text-[#0F172A]">{b.state}</strong> {b.postcode}
               </span>
               {b.phone && (
                 <span className="flex items-center gap-1">
-                  <Phone className="w-3.5 h-3.5 text-slate-400" />
+                  <Phone className="w-3.5 h-3.5 text-[#94A3B8]" />
                   {b.phone}
                 </span>
               )}
               {b.general_email && (
                 <span className="flex items-center gap-1">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  <Mail className="w-3.5 h-3.5 text-[#94A3B8]" />
                   {b.general_email}
                 </span>
               )}
@@ -281,28 +281,36 @@ export function LeadDetailView() {
           </div>
 
           {/* Right Lead Scores & Pipeline Status Dropdown */}
-          <div className="flex items-center gap-4 flex-wrap bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+          <div className="flex items-center gap-4 flex-wrap bg-[#F8FAFC] p-3.5 rounded-xl border border-[#E2E8F0]">
             
             {/* Lead Score Widget */}
             <div className="text-center px-2">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-0.5">Lead Score</span>
-              <span className={`inline-flex items-center gap-1 text-sm font-black px-3 py-1 rounded-xl border ${scoreBadge.badgeClass}`}>
-                ★ {l.lead_score}/10
-              </span>
+              <span className="text-[10px] uppercase font-bold tracking-wider text-[#94A3B8] block mb-0.5">Lead Score</span>
+              <div className="flex items-center gap-1.5">
+                <span className={`text-sm font-black ${scoreBadge.textColor}`}>
+                  {l.lead_score}/10
+                </span>
+                <div className="w-12 h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
+                  <div
+                    style={{ width: `${l.lead_score * 10}%` }}
+                    className={`h-full ${scoreBadge.barColor} rounded-full`}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Opportunity Score Widget */}
-            <div className="text-center px-2 border-l border-slate-200 dark:border-slate-700">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-0.5">Opportunity</span>
-              <span className={`inline-flex items-center gap-1.5 text-sm font-black px-3 py-1 rounded-xl border ${opp.badgeClass}`}>
-                <span className={`w-2 h-2 rounded-full ${opp.bgClass}`} />
-                {wa?.opportunity_score ?? 50}%
+            <div className="text-center px-2 border-l border-[#E2E8F0]">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-[#94A3B8] block mb-0.5">Website Opportunity</span>
+              <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full ${opp.badgeClass}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${opp.bgClass}`} />
+                {opp.label} ({wa?.opportunity_score ?? 50}%)
               </span>
             </div>
 
             {/* Pipeline Status Select */}
-            <div className="text-left px-2 border-l border-slate-200 dark:border-slate-700">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-0.5">Pipeline Stage</span>
+            <div className="text-left px-2 border-l border-[#E2E8F0]">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-[#94A3B8] block mb-0.5">Pipeline Stage</span>
               <select
                 value={l.lead_status}
                 onChange={(e) => {
@@ -322,7 +330,7 @@ export function LeadDetailView() {
                     ]
                   });
                 }}
-                className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-xs"
+                className="bg-white border border-[#CBD5E1] rounded-lg px-2.5 py-1 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#2563EB] shadow-xs"
               >
                 {[
                   'New', 'Researching', 'Qualified', 'Ready for Outreach', 'Contacted', 'Interested', 'Meeting', 'Proposal', 'Won', 'Lost', 'Disqualified'
@@ -336,26 +344,26 @@ export function LeadDetailView() {
 
         </div>
 
-        {/* Next Step Recommendation Banner (Section 29) */}
-        <div className="mt-5 p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50/50 to-blue-50/20 dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-slate-900 border border-blue-200/80 dark:border-blue-800/50 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold shrink-0 shadow-sm shadow-blue-600/30">
-              <Sparkles className="w-4 h-4" />
+        {/* Next Step Recommendation Banner */}
+        <div className="mt-4 p-3.5 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-md bg-[#2563EB] text-white flex items-center justify-center font-bold shrink-0">
+              <Sparkles className="w-3.5 h-3.5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8]">
                   Recommended Next Action
                 </span>
-                <span className="font-bold text-xs text-slate-900 dark:text-white">• {nextStep.title}</span>
+                <span className="font-bold text-xs text-[#0F172A]">• {nextStep.title}</span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">{nextStep.desc}</p>
+              <p className="text-xs text-[#475569] mt-0.5">{nextStep.desc}</p>
             </div>
           </div>
 
           <button
             onClick={nextStep.action}
-            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-sm shadow-blue-600/30 transition-all flex items-center gap-1.5 shrink-0"
+            className="h-8 px-3.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 shrink-0"
           >
             <span>{nextStep.actionText}</span>
             <ArrowRight className="w-3.5 h-3.5" />

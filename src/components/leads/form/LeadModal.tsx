@@ -103,10 +103,10 @@ export function LeadModal() {
         updated_at: timestamp
       },
       digital_presence: {
-        id: `dp-${Date.now()}`,
+        id: `dp-${bizId}`,
         business_id: bizId,
         website_url: websiteUrl.trim() || undefined,
-        website_exists: websiteExists,
+        website_exists: websiteStatus !== 'No Website',
         website_status: websiteStatus,
         website_technology: websiteTechnology.trim() || undefined,
         google_maps_url: googleMapsUrl.trim() || undefined,
@@ -120,7 +120,7 @@ export function LeadModal() {
         updated_at: timestamp
       },
       lead: {
-        id: `lead-${Date.now()}`,
+        id: `lead-${bizId}`,
         business_id: bizId,
         lead_score: websiteStatus === 'No Website' ? 10 : 8,
         lead_status: 'New',
@@ -129,18 +129,18 @@ export function LeadModal() {
         updated_at: timestamp
       },
       website_audit: {
-        id: `wa-${Date.now()}`,
+        id: `wa-${bizId}`,
         business_id: bizId,
-        visual_design_score: websiteStatus === 'No Website' ? 0 : 4,
-        branding_score: 4,
-        typography_score: 4,
-        image_quality_score: 3,
-        navigation_score: 4,
-        mobile_ux_score: websiteStatus === 'No Website' ? 0 : 3,
-        user_journey_score: 3,
-        cta_score: 3,
-        loading_speed_score: 4,
-        mobile_performance_score: 3,
+        visual_design_score: websiteStatus === 'No Website' ? 0 : 5,
+        branding_score: 5,
+        typography_score: 5,
+        image_quality_score: 4,
+        navigation_score: 5,
+        mobile_ux_score: websiteStatus === 'No Website' ? 0 : 4,
+        user_journey_score: 4,
+        cta_score: 4,
+        loading_speed_score: 5,
+        mobile_performance_score: 4,
         contact_cta: true,
         appointment_cta: false,
         enquiry_form: false,
@@ -152,15 +152,15 @@ export function LeadModal() {
         testimonials: false,
         trust_signals: true,
         certifications: true,
-        what_i_noticed: websiteStatus === 'No Website' ? 'No website found during initial intake.' : 'Preliminary evaluation indicates redesign opportunity.',
-        recommended_improvements: '1. Modern high-converting medical website layout\n2. Online appointment engine integration',
-        opportunity_score: websiteStatus === 'No Website' ? 98 : 80,
+        what_i_noticed: websiteStatus === 'No Website' ? 'No website found. Immediate lead.' : 'Initial entry.',
+        recommended_improvements: '1. Build or redesign modern medical site',
+        opportunity_score: websiteStatus === 'No Website' ? 95 : 75,
         created_at: timestamp,
         updated_at: timestamp
       },
       decision_makers: dmName.trim() ? [
         {
-          id: `dm-${Date.now()}`,
+          id: `dm-${bizId}`,
           business_id: bizId,
           full_name: dmName.trim(),
           position: dmPosition.trim() || 'Director',
@@ -175,7 +175,16 @@ export function LeadModal() {
         }
       ] : [],
       tasks: [],
-      activities: [],
+      activities: [
+        {
+          id: `act-${Date.now()}`,
+          business_id: bizId,
+          activity_type: 'lead_created',
+          description: 'Lead manually entered into CRM',
+          user_name: 'You',
+          created_at: timestamp
+        }
+      ],
       tags: []
     };
 
@@ -184,13 +193,11 @@ export function LeadModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!businessName.trim() || !city.trim() || !address.trim() || !postcode.trim()) {
-      alert('Please fill in required business details.');
+      setActiveStep('business');
       return;
     }
 
-    // Duplicate Check
     const candidate = {
       business_name: businessName,
       address,
@@ -209,7 +216,6 @@ export function LeadModal() {
       return;
     }
 
-    // Proceed to create
     const lead = constructLeadObject();
     const created = createLead(lead);
     setIsAddModalOpen(false);
@@ -232,25 +238,25 @@ export function LeadModal() {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in">
-        <div className="w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B1220]/60 backdrop-blur-sm animate-fadeIn">
+        <div className="w-full max-w-3xl bg-white rounded-xl shadow-modal border border-[#E2E8F0] overflow-hidden flex flex-col max-h-[90vh]">
           
           {/* Header */}
-          <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Add New Medical Business Lead</h2>
-              <p className="text-xs text-slate-400">Capture business information, digital presence, and decision-maker contact</p>
+              <h2 className="text-base font-bold text-[#0F172A]">Add New Medical Business Lead</h2>
+              <p className="text-xs text-[#64748B]">Capture business information, digital presence, and decision-maker contact</p>
             </div>
             <button
               onClick={() => setIsAddModalOpen(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-1 rounded-md text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Form Step Switcher */}
-          <div className="flex items-center border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 px-6 text-xs font-semibold">
+          <div className="flex items-center border-b border-[#E2E8F0] bg-[#F8FAFC] px-5 text-xs font-semibold">
             {[
               { id: 'business', label: '1. Business Profile', icon: Building2 },
               { id: 'digital', label: '2. Digital Presence', icon: Globe },
@@ -264,8 +270,8 @@ export function LeadModal() {
                   onClick={() => setActiveStep(step.id as any)}
                   className={`flex items-center gap-2 py-3 px-4 border-b-2 transition-all ${
                     isActive 
-                      ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900' 
-                      : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                      ? 'border-[#2563EB] text-[#2563EB] bg-white' 
+                      : 'border-transparent text-[#64748B] hover:text-[#0F172A]'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -276,174 +282,176 @@ export function LeadModal() {
           </div>
 
           {/* Form Container */}
-          <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 text-xs">
+          <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
             
             {/* STEP 1: BUSINESS PROFILE */}
             {activeStep === 'business' && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Business Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="e.g. Melbourne Orthopaedic Clinic"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
+                
+                {/* Section: Business Information */}
+                <div className="p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0] space-y-3">
+                  <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider block">Business Information</span>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Business Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="e.g. Melbourne Orthopaedic Clinic"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Business Type *</label>
+                      <select
+                        value={businessType}
+                        onChange={(e) => setBusinessType(e.target.value as any)}
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      >
+                        {['Hospital', 'Clinic', 'Medical Centre', 'Medical Equipment', 'Medical Device', 'Rehabilitation', 'Other'].map(t => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Business Type *</label>
-                    <select
-                      value={businessType}
-                      onChange={(e) => setBusinessType(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    >
-                      {['Hospital', 'Clinic', 'Medical Centre', 'Medical Equipment', 'Medical Device', 'Rehabilitation', 'Other'].map(t => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Subcategory</label>
+                      <input
+                        type="text"
+                        value={subcategory}
+                        onChange={(e) => setSubcategory(e.target.value)}
+                        placeholder="e.g. Cosmetic Surgery / Dental"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      />
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Subcategory</label>
-                    <input
-                      type="text"
-                      value={subcategory}
-                      onChange={(e) => setSubcategory(e.target.value)}
-                      placeholder="e.g. Cosmetic Surgery / Dental"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
-                  </div>
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Ownership Type</label>
+                      <select
+                        value={ownershipType}
+                        onChange={(e) => setOwnershipType(e.target.value as any)}
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      >
+                        {['Independent', 'Private', 'Public', 'Unknown'].map(o => (
+                          <option key={o} value={o}>{o}</option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Ownership Type</label>
-                    <select
-                      value={ownershipType}
-                      onChange={(e) => setOwnershipType(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    >
-                      {['Independent', 'Private', 'Public', 'Unknown'].map(o => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">ABN (Australian Business #)</label>
-                    <input
-                      type="text"
-                      value={abn}
-                      onChange={(e) => setAbn(e.target.value)}
-                      placeholder="e.g. 51 824 753 556"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-mono text-[11px]"
-                    />
-                  </div>
-                </div>
-
-                {/* Address details */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Street Address *</label>
-                    <input
-                      type="text"
-                      required
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="e.g. Suite 4, 185 Macquarie St"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">City / Suburb *</label>
-                    <input
-                      type="text"
-                      required
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="e.g. Sydney"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">State *</label>
-                    <select
-                      value={state}
-                      onChange={(e) => setState(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-bold text-blue-600"
-                    >
-                      {['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'].map(s => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">ABN</label>
+                      <input
+                        type="text"
+                        value={abn}
+                        onChange={(e) => setAbn(e.target.value)}
+                        placeholder="e.g. 51 824 753 556"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-mono text-[11px] text-[#0F172A]"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Postcode *</label>
-                    <input
-                      type="text"
-                      required
-                      value={postcode}
-                      onChange={(e) => setPostcode(e.target.value)}
-                      placeholder="e.g. 2000"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
+                {/* Section: Location */}
+                <div className="p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0] space-y-3">
+                  <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider block">Location</span>
+
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div className="md:col-span-2">
+                      <label className="font-bold text-[#0F172A] block mb-1">Street Address *</label>
+                      <input
+                        type="text"
+                        required
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="e.g. Suite 4, 185 Macquarie St"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A] focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">City / Suburb *</label>
+                      <input
+                        type="text"
+                        required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="e.g. Sydney"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">State *</label>
+                      <select
+                        value={state}
+                        onChange={(e) => setState(e.target.value as any)}
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-bold text-[#2563EB]"
+                      >
+                        {['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'].map(s => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Main Clinic Phone</label>
-                    <input
-                      type="text"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="(02) 9000 0000"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
-                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Postcode *</label>
+                      <input
+                        type="text"
+                        required
+                        value={postcode}
+                        onChange={(e) => setPostcode(e.target.value)}
+                        placeholder="e.g. 2000"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">General Email</label>
-                    <input
-                      type="email"
-                      value={generalEmail}
-                      onChange={(e) => setGeneralEmail(e.target.value)}
-                      placeholder="reception@clinic.com.au"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                    />
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">Phone</label>
+                      <input
+                        type="text"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="(02) 9000 0000"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold text-[#0F172A] block mb-1">General Email</label>
+                      <input
+                        type="email"
+                        value={generalEmail}
+                        onChange={(e) => setGeneralEmail(e.target.value)}
+                        placeholder="reception@clinic.com.au"
+                        className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Business Description</label>
-                  <textarea
-                    rows={2}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Summary of medical services, surgical specialties, patient capacity..."
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                  />
-                </div>
               </div>
             )}
 
             {/* STEP 2: DIGITAL PRESENCE */}
             {activeStep === 'digital' && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0] space-y-3">
+                <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider block">Digital Presence</span>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Website Status (Opportunity)</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Website Status (Opportunity)</label>
                     <select
                       value={websiteStatus}
                       onChange={(e) => handleWebsiteStatusChange(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold text-blue-600"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-semibold text-[#2563EB]"
                     >
                       <option value="No Website">No Website (Highest Opportunity)</option>
                       <option value="Severely Outdated">Severely Outdated</option>
@@ -454,25 +462,25 @@ export function LeadModal() {
                   </div>
 
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Official Website URL</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Official Website URL</label>
                     <input
                       type="url"
                       disabled={websiteStatus === 'No Website'}
                       value={websiteUrl}
                       onChange={(e) => setWebsiteUrl(e.target.value)}
                       placeholder="https://exampleclinic.com.au"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium disabled:opacity-50"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium disabled:opacity-50 text-[#0F172A]"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Google Maps Status</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Google Maps Status</label>
                     <select
                       value={googleMapsVerified}
                       onChange={(e) => setGoogleMapsVerified(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     >
                       <option value="Verified">Verified</option>
                       <option value="Pending">Pending</option>
@@ -481,7 +489,7 @@ export function LeadModal() {
                   </div>
 
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Google Rating (0.0 - 5.0)</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Google Rating (0.0 - 5.0)</label>
                     <input
                       type="number"
                       step="0.1"
@@ -490,111 +498,87 @@ export function LeadModal() {
                       value={googleRating ?? ''}
                       onChange={(e) => setGoogleRating(Number(e.target.value) || undefined)}
                       placeholder="4.8"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Google Review Count</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Review Count</label>
                     <input
                       type="number"
                       min="0"
                       value={googleReviewCount ?? ''}
                       onChange={(e) => setGoogleReviewCount(Number(e.target.value) || 0)}
                       placeholder="45"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Google Maps Profile URL</label>
-                  <input
-                    type="url"
-                    value={googleMapsUrl}
-                    onChange={(e) => setGoogleMapsUrl(e.target.value)}
-                    placeholder="https://maps.google.com/?q=..."
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                  />
                 </div>
               </div>
             )}
 
             {/* STEP 3: INITIAL DECISION MAKER */}
             {activeStep === 'contact' && (
-              <div className="space-y-4">
-                <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 text-blue-800 dark:text-blue-200 text-xs">
-                  Adding a verified decision maker automatically boosts the Lead Score.
-                </div>
+              <div className="p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0] space-y-3">
+                <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider block">Decision Maker</span>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Contact Full Name</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Contact Full Name</label>
                     <input
                       type="text"
                       value={dmName}
                       onChange={(e) => setDmName(e.target.value)}
                       placeholder="e.g. Dr. Alistair Vance"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Role / Position</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Role / Position</label>
                     <input
                       type="text"
                       value={dmPosition}
                       onChange={(e) => setDmPosition(e.target.value)}
                       placeholder="e.g. Managing Partner & Principal GP"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Direct Email</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Direct Email</label>
                     <input
                       type="email"
                       value={dmEmail}
                       onChange={(e) => setDmEmail(e.target.value)}
                       placeholder="doctor@practice.com.au"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Direct Mobile / Phone</label>
+                    <label className="font-bold text-[#0F172A] block mb-1">Phone</label>
                     <input
                       type="text"
                       value={dmPhone}
                       onChange={(e) => setDmPhone(e.target.value)}
                       placeholder="0412 000 000"
-                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
+                      className="w-full bg-white border border-[#CBD5E1] rounded-lg p-2 font-medium text-[#0F172A]"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">LinkedIn Profile</label>
-                  <input
-                    type="url"
-                    value={dmLinkedin}
-                    onChange={(e) => setDmLinkedin(e.target.value)}
-                    placeholder="https://linkedin.com/in/..."
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"
-                  />
                 </div>
               </div>
             )}
 
             {/* Footer Buttons */}
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="pt-3 border-t border-[#E2E8F0] flex items-center justify-between">
               {activeStep !== 'business' ? (
                 <button
                   type="button"
                   onClick={() => setActiveStep(activeStep === 'contact' ? 'digital' : 'business')}
-                  className="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-400 font-semibold"
+                  className="h-9 px-4 rounded-lg text-[#64748B] hover:text-[#0F172A] font-semibold text-xs"
                 >
                   Back
                 </button>
@@ -605,14 +589,14 @@ export function LeadModal() {
                   <button
                     type="button"
                     onClick={() => setActiveStep(activeStep === 'business' ? 'digital' : 'contact')}
-                    className="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold"
+                    className="h-9 px-4 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-xs"
                   >
                     Next Step →
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md shadow-blue-600/30"
+                    className="h-9 px-5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs shadow-xs"
                   >
                     Save & Create Lead
                   </button>

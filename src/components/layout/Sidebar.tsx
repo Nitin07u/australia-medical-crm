@@ -2,166 +2,178 @@ import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   Users, 
-  Building2, 
-  Stethoscope, 
   Hospital, 
+  Stethoscope, 
+  Building2, 
   Cpu, 
-  Gauge, 
+  Globe, 
   UserCheck, 
   CheckSquare, 
   UploadCloud, 
   Settings, 
   ChevronLeft, 
   ChevronRight,
-  Database,
+  Shield,
   Activity,
-  PlusCircle,
-  ExternalLink,
-  Flame
+  Layers
 } from 'lucide-react';
-import { useLeads, ActiveRoute } from '../../context/LeadContext';
+import { useLeads } from '../../context/LeadContext';
 import { useAuth } from '../../context/AuthContext';
+import { ActiveRoute } from '../../types';
+
+interface NavSection {
+  title: string;
+  items: {
+    id: ActiveRoute;
+    label: string;
+    icon: React.ElementType;
+    badge?: number | string;
+    badgeColor?: string;
+  }[];
+}
 
 export function Sidebar() {
-  const { currentRoute, setCurrentRoute, leads, setIsAddModalOpen } = useLeads();
+  const { currentRoute, setCurrentRoute, leads } = useLeads();
   const { user, isSupabaseLive } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Compute live badges
   const totalLeads = leads.length;
-  const hospitalsCount = leads.filter(l => l.business.business_type === 'Hospital').length;
-  const clinicsCount = leads.filter(l => l.business.business_type === 'Clinic').length;
+  const hospitalCount = leads.filter(l => l.business.business_type === 'Hospital').length;
+  const clinicCount = leads.filter(l => l.business.business_type === 'Clinic').length;
   const centresCount = leads.filter(l => l.business.business_type === 'Medical Centre').length;
-  const equipmentCount = leads.filter(l => l.business.business_type === 'Medical Equipment' || l.business.business_type === 'Medical Device').length;
-  const noWebsiteCount = leads.filter(l => l.digital_presence.website_status === 'No Website').length;
-  const tasksPending = leads.reduce((acc, l) => acc + l.tasks.filter(t => t.status !== 'Completed').length, 0);
-  const highPriorityCount = leads.filter(l => l.lead.lead_score >= 9).length;
+  const equipCount = leads.filter(l => l.business.business_type === 'Medical Equipment' || l.business.business_type === 'Medical Device').length;
+  const pendingTasksCount = leads.flatMap(l => l.tasks).filter(t => t.status !== 'Completed').length;
+  const noWebsiteAudits = leads.filter(l => l.digital_presence.website_status === 'No Website' || l.digital_presence.website_status === 'Severely Outdated').length;
 
-  const navItems: { id: ActiveRoute; label: string; icon: React.ElementType; badge?: number | string; badgeColor?: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'leads', label: 'All Leads', icon: Users, badge: totalLeads },
-    { id: 'hospitals', label: 'Hospitals', icon: Hospital, badge: hospitalsCount },
-    { id: 'clinics', label: 'Clinics', icon: Stethoscope, badge: clinicsCount },
-    { id: 'medical-centres', label: 'Medical Centres', icon: Building2, badge: centresCount },
-    { id: 'medical-equipment', label: 'Medical Equipment', icon: Cpu, badge: equipmentCount },
-    { id: 'website-audit', label: 'Website Audit', icon: Gauge, badge: `${noWebsiteCount} no site`, badgeColor: 'bg-rose-500/20 text-rose-300' },
-    { id: 'decision-makers', label: 'Decision Makers', icon: UserCheck },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare, badge: tasksPending > 0 ? tasksPending : undefined, badgeColor: 'bg-amber-500/20 text-amber-300' },
-    { id: 'import-leads', label: 'Import Leads', icon: UploadCloud },
-    { id: 'settings', label: 'Settings', icon: Settings }
+  const sections: NavSection[] = [
+    {
+      title: 'MAIN',
+      items: [
+        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { id: 'leads', label: 'All Leads', icon: Users, badge: totalLeads },
+        { id: 'hospitals', label: 'Hospitals', icon: Hospital, badge: hospitalCount },
+        { id: 'clinics', label: 'Clinics', icon: Stethoscope, badge: clinicCount },
+        { id: 'medical-centres', label: 'Medical Centres', icon: Building2, badge: centresCount },
+        { id: 'medical-equipment', label: 'Medical Equipment', icon: Cpu, badge: equipCount },
+      ]
+    },
+    {
+      title: 'RESEARCH & AUDIT',
+      items: [
+        { id: 'website-audit', label: 'Website Audit', icon: Globe, badge: noWebsiteAudits > 0 ? noWebsiteAudits : undefined, badgeColor: 'bg-rose-900/60 text-rose-300 border border-rose-700/50' },
+        { id: 'decision-makers', label: 'Decision Makers', icon: UserCheck },
+        { id: 'tasks', label: 'Tasks', icon: CheckSquare, badge: pendingTasksCount > 0 ? pendingTasksCount : undefined, badgeColor: 'bg-amber-900/60 text-amber-300 border border-amber-700/50' },
+      ]
+    },
+    {
+      title: 'SYSTEM',
+      items: [
+        { id: 'import-leads', label: 'Import Leads', icon: UploadCloud },
+        { id: 'settings', label: 'Settings', icon: Settings },
+      ]
+    }
   ];
 
   return (
     <aside 
-      className={`h-screen bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between transition-all duration-300 select-none z-30 shrink-0 sticky top-0 ${
-        isCollapsed ? 'w-20' : 'w-64'
-      }`}
+      className={`bg-[#0B1220] border-r border-[#1E293B] flex flex-col justify-between transition-all duration-200 z-30 select-none ${
+        isCollapsed ? 'w-[72px]' : 'w-64'
+      } min-h-screen shrink-0`}
     >
-      {/* Brand Header */}
       <div>
-        <div className="flex items-center justify-between px-4 py-5 border-b border-slate-800">
-          <div 
-            onClick={() => setCurrentRoute('dashboard')} 
-            className="flex items-center gap-3 cursor-pointer group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
-              <Activity className="w-5 h-5" />
-            </div>
-            {!isCollapsed && (
+        {/* Brand Header */}
+        <div className="h-16 px-4 flex items-center justify-between border-b border-[#1E293B]">
+          {!isCollapsed ? (
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white shadow-sm shrink-0">
+                <Activity className="w-4 h-4 stroke-[2.5]" />
+              </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="font-bold text-white tracking-tight text-base leading-tight">MedLead AU</h1>
-                  <span className="text-[10px] font-semibold tracking-wider bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/30">CRM</span>
+                  <span className="font-bold text-[14px] text-white tracking-tight">MedLead AU</span>
+                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-[#2563EB]/20 text-blue-400 border border-blue-500/30">
+                    B2B
+                  </span>
                 </div>
-                <p className="text-[11px] text-slate-400 truncate">Medical Lead Intelligence</p>
+                <p className="text-[10px] text-[#94A3B8] truncate leading-none mt-0.5">Medical Lead Intelligence</p>
               </div>
-            )}
-          </div>
-          
+            </div>
+          ) : (
+            <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white mx-auto shadow-sm">
+              <Activity className="w-4 h-4 stroke-[2.5]" />
+            </div>
+          )}
+
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-1 rounded-md text-[#94A3B8] hover:text-white hover:bg-[#1E293B] transition-colors"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* Quick Add Button */}
-        <div className="p-3">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className={`w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 px-3 rounded-xl transition-all shadow-sm shadow-blue-600/30 hover:shadow-blue-600/50 active:scale-[0.98] ${
-              isCollapsed ? 'px-0' : ''
-            }`}
-          >
-            <PlusCircle className="w-4 h-4 shrink-0" />
-            {!isCollapsed && <span className="text-xs font-semibold">Add New Lead</span>}
-          </button>
-        </div>
-
-        {/* Navigation Items */}
-        <nav className="px-2 py-2 space-y-1 overflow-y-auto max-h-[calc(100vh-280px)] scrollbar-thin scrollbar-thumb-slate-800">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentRoute === item.id || (item.id === 'leads' && currentRoute === 'lead-detail');
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => setCurrentRoute(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
-                  isActive
-                    ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 font-semibold'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                }`}
-                title={isCollapsed ? item.label : undefined}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <Icon className={`w-4 h-4 shrink-0 transition-colors ${
-                    isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-200'
-                  }`} />
-                  {!isCollapsed && (
-                    <span className="truncate">{item.label}</span>
-                  )}
+        {/* Navigation Sections */}
+        <nav className="p-3 space-y-6 overflow-y-auto max-h-[calc(100vh-160px)] scrollbar-none">
+          {sections.map((section) => (
+            <div key={section.title} className="space-y-1">
+              {!isCollapsed && (
+                <div className="px-3 pb-1.5 text-[10px] font-bold tracking-wider text-[#64748B] uppercase">
+                  {section.title}
                 </div>
+              )}
 
-                {!isCollapsed && item.badge !== undefined && (
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                    item.badgeColor || (isActive ? 'bg-blue-500/20 text-blue-300' : 'bg-slate-800 text-slate-400')
-                  }`}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+              <div className="space-y-0.5">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentRoute === item.id || (item.id === 'leads' && currentRoute === 'lead-detail');
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setCurrentRoute(item.id)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all group ${
+                        isActive
+                          ? 'bg-[#1E293B] text-white font-semibold shadow-xs relative'
+                          : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#111B2E]'
+                      }`}
+                      title={isCollapsed ? item.label : undefined}
+                    >
+                      {/* Active Indicator Bar */}
+                      {isActive && (
+                        <div className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#2563EB] rounded-r" />
+                      )}
+
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <Icon className={`w-4 h-4 shrink-0 transition-colors ${
+                          isActive ? 'text-[#3B82F6]' : 'text-[#64748B] group-hover:text-[#94A3B8]'
+                        }`} />
+                        {!isCollapsed && (
+                          <span className="truncate">{item.label}</span>
+                        )}
+                      </div>
+
+                      {!isCollapsed && item.badge !== undefined && (
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                          item.badgeColor || (isActive ? 'bg-[#2563EB]/20 text-[#60A5FA]' : 'bg-[#1E293B] text-[#94A3B8]')
+                        }`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
       </div>
 
-      {/* Footer Status & User Profile */}
-      <div className="p-3 border-t border-slate-800 bg-slate-950/40">
-        {/* Supabase status badge */}
-        {!isCollapsed && (
-          <div className="mb-3 px-2 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 flex items-center justify-between text-[11px]">
-            <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${isSupabaseLive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-              <span className="text-slate-300 font-medium">
-                {isSupabaseLive ? 'Supabase Connected' : 'Local / Demo Mode'}
-              </span>
-            </div>
-            <button
-              onClick={() => setCurrentRoute('settings')}
-              className="text-blue-400 hover:text-blue-300 font-semibold hover:underline text-[10px]"
-            >
-              Config
-            </button>
-          </div>
-        )}
-
-        {/* User Card */}
-        <div className="flex items-center gap-3 px-1 py-1">
-          <div className="w-8 h-8 rounded-full bg-slate-700 overflow-hidden border border-slate-600 shrink-0">
+      {/* Footer User Profile */}
+      <div className="p-3 border-t border-[#1E293B] bg-[#060B13]/40">
+        <div className="flex items-center gap-2.5 px-1 py-1">
+          <div className="w-8 h-8 rounded-full bg-[#1E293B] overflow-hidden border border-[#334155] shrink-0">
             <img 
               src={user?.avatar || '/nitin-avatar.jpg'} 
               alt={user?.name || 'Nitin Upadhyaya'} 
@@ -171,7 +183,7 @@ export function Sidebar() {
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold text-white truncate">{user?.name || 'Nitin Upadhyaya'}</p>
-              <p className="text-[10px] text-slate-400 truncate">{user?.email || 'hello@stoiclabs.dev'}</p>
+              <p className="text-[10px] text-[#94A3B8] truncate">{user?.email || 'hello@stoiclabs.dev'}</p>
             </div>
           )}
         </div>

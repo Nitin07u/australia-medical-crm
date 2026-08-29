@@ -3,14 +3,10 @@ import {
   Search, 
   Plus, 
   Filter, 
-  Bell, 
-  UploadCloud, 
   Download, 
-  Database,
-  Moon,
-  Sun,
-  ShieldAlert,
-  Sparkles
+  UploadCloud, 
+  ChevronRight,
+  Database
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
 import { useAuth } from '../../context/AuthContext';
@@ -31,38 +27,38 @@ export function TopNav() {
   const { isSupabaseLive } = useAuth();
   const { showToast } = useToast();
 
-  const getRouteTitle = () => {
+  const getRouteBreadcrumb = () => {
     switch (currentRoute) {
       case 'dashboard':
-        return { title: 'Executive Intelligence Dashboard', subtitle: 'Real-time overview of Australian medical market opportunities' };
+        return { section: 'Overview', page: 'Executive Dashboard' };
       case 'leads':
-        return { title: 'Lead Directory & CRM Table', subtitle: 'Manage, score, filter and qualify medical businesses' };
+        return { section: 'Leads', page: 'All Medical Leads' };
       case 'hospitals':
-        return { title: 'Hospitals & Surgical Facilities', subtitle: 'Private and public hospitals and day surgery units' };
+        return { section: 'Facilities', page: 'Hospitals & Surgical Centres' };
       case 'clinics':
-        return { title: 'Specialist Medical Clinics', subtitle: 'Private dental, orthopaedic, physiotherapy, and specialist rooms' };
+        return { section: 'Facilities', page: 'Specialist Medical Clinics' };
       case 'medical-centres':
-        return { title: 'General Practice Medical Centres', subtitle: 'High-volume community and allied health practices' };
+        return { section: 'Facilities', page: 'General Practice Centres' };
       case 'medical-equipment':
-        return { title: 'Medical Equipment & Device Suppliers', subtitle: 'B2B distributors, diagnostics, and surgical suppliers' };
+        return { section: 'Facilities', page: 'Medical Equipment & Devices' };
       case 'website-audit':
-        return { title: 'Website Audit & Opportunity Hub', subtitle: 'Deep UX, mobile performance, and conversion evaluation' };
+        return { section: 'Research', page: 'Website Opportunity Hub' };
       case 'decision-makers':
-        return { title: 'Decision Makers Directory', subtitle: 'Founders, Directors, Practice Managers, and CEOs' };
+        return { section: 'Research', page: 'Decision Makers Directory' };
       case 'tasks':
-        return { title: 'Outreach & Research Tasks', subtitle: 'Action items, audits, and follow-ups for team members' };
+        return { section: 'Research', page: 'Outreach Tasks' };
       case 'import-leads':
-        return { title: '5-Step CSV Import Wizard', subtitle: 'Bulk import and map Australian medical registries' };
+        return { section: 'System', page: 'CSV Import Wizard' };
       case 'settings':
-        return { title: 'Settings & Supabase Integration', subtitle: 'Database connections, RLS policies, tags, and backups' };
+        return { section: 'System', page: 'Settings & Database' };
       case 'lead-detail':
-        return { title: 'Lead Detail Profile', subtitle: 'Comprehensive digital footprint and decision-maker dossier' };
+        return { section: 'Leads', page: 'Facility Profile Dossier' };
       default:
-        return { title: 'MedLead AU CRM', subtitle: 'Australian Medical Business Lead Intelligence' };
+        return { section: 'CRM', page: 'MedLead AU' };
     }
   };
 
-  const { title, subtitle } = getRouteTitle();
+  const { section, page } = getRouteBreadcrumb();
 
   const handleExportCsv = () => {
     const csv = exportLeadsToCsv(filteredLeads.length > 0 ? filteredLeads : leads);
@@ -83,27 +79,24 @@ export function TopNav() {
   };
 
   return (
-    <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 sticky top-0 z-20 flex items-center justify-between gap-4 backdrop-blur-md bg-white/90 dark:bg-slate-900/90">
-      {/* Route Title & Breadcrumb */}
-      <div className="min-w-0">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-tight truncate">
-          {title}
-        </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 hidden sm:block truncate mt-0.5">
-          {subtitle}
-        </p>
+    <header className="bg-white border-b border-[#E2E8F0] px-6 h-16 sticky top-0 z-20 flex items-center justify-between gap-4">
+      {/* Breadcrumb & Title */}
+      <div className="flex items-center gap-2 text-xs">
+        <span className="text-[#94A3B8] font-medium">{section}</span>
+        <ChevronRight className="w-3.5 h-3.5 text-[#CBD5E1]" />
+        <h1 className="text-[#0F172A] font-bold text-sm tracking-tight">{page}</h1>
       </div>
 
       {/* Global Actions */}
-      <div className="flex items-center gap-2.5 shrink-0">
-        {/* Global Search Button */}
+      <div className="flex items-center gap-2.5">
+        {/* Quick Search */}
         <button
           onClick={() => setIsSearchModalOpen(true)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition-all group"
+          className="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#64748B] hover:text-[#0F172A] text-xs font-medium border border-[#E2E8F0] transition-colors"
         >
-          <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+          <Search className="w-3.5 h-3.5 text-[#94A3B8]" />
           <span className="hidden md:inline">Quick search...</span>
-          <kbd className="hidden lg:inline-flex items-center text-[10px] text-slate-400 font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+          <kbd className="hidden lg:inline-flex items-center text-[10px] text-[#94A3B8] font-mono bg-white px-1.5 py-0.5 rounded border border-[#E2E8F0]">
             ⌘K
           </kbd>
         </button>
@@ -111,46 +104,46 @@ export function TopNav() {
         {/* Filter Drawer Toggle */}
         <button
           onClick={() => setIsFilterDrawerOpen(true)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-colors relative ${
+          className={`flex items-center gap-1.5 h-9 px-3 rounded-lg border text-xs font-medium transition-colors ${
             activeFilterCount > 0
-              ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700'
-              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+              ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]'
+              : 'bg-white text-[#475569] border-[#E2E8F0] hover:bg-[#F8FAFC]'
           }`}
         >
           <Filter className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Filters</span>
           {activeFilterCount > 0 && (
-            <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-[#2563EB] text-white text-[10px] font-bold flex items-center justify-center">
               {activeFilterCount}
             </span>
           )}
         </button>
 
-        {/* Export CSV Button */}
+        {/* Export CSV */}
         <button
           onClick={handleExportCsv}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-colors"
+          className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-lg bg-white border border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#475569] hover:text-[#0F172A] text-xs font-medium transition-colors"
           title="Export current view to CSV"
         >
-          <Download className="w-3.5 h-3.5 text-slate-500" />
-          <span className="hidden md:inline">Export</span>
+          <Download className="w-3.5 h-3.5 text-[#64748B]" />
+          <span className="hidden md:inline">Export CSV</span>
         </button>
 
-        {/* Import Leads Button */}
+        {/* Import CSV */}
         <button
           onClick={() => setCurrentRoute('import-leads')}
-          className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition-colors"
+          className="hidden md:flex items-center gap-1.5 h-9 px-3 rounded-lg bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#475569] text-xs font-medium border border-[#E2E8F0] transition-colors"
         >
-          <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
-          <span>Import CSV</span>
+          <UploadCloud className="w-3.5 h-3.5 text-[#64748B]" />
+          <span>Import</span>
         </button>
 
-        {/* Add Lead Primary CTA */}
+        {/* Primary Add Lead Button */}
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm shadow-blue-600/30 active:scale-[0.98] transition-all"
+          className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-xs active:scale-[0.98] transition-all"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 stroke-[2.5]" />
           <span className="hidden sm:inline">Add Lead</span>
         </button>
       </div>

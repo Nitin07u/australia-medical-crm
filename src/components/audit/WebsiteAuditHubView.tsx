@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { 
-  Gauge, 
   Globe, 
   AlertTriangle, 
   CheckCircle2, 
   ArrowRight, 
   Smartphone, 
-  Zap, 
   Search, 
-  Sparkles, 
   ExternalLink,
   ChevronRight,
-  TrendingUp,
-  FileCheck
+  Sparkles,
+  Zap,
+  Activity
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
-import { getOpportunityLevel, getLeadScoreBadge } from '../../services/auditCalculator';
+import { getOpportunityLevel, getLeadScoreBadge, getWebsiteStatusBadge } from '../../services/auditCalculator';
 
 export function WebsiteAuditHubView() {
   const { leads, openLeadDetail } = useLeads();
@@ -44,58 +42,62 @@ export function WebsiteAuditHubView() {
 
   const highOppCount = leads.filter(l => (l.website_audit?.opportunity_score ?? 50) >= 80).length;
   const noSiteCount = leads.filter(l => l.digital_presence.website_status === 'No Website').length;
-  const completedAuditsCount = leads.filter(l => Boolean(l.website_audit)).length;
+  const outdatedCount = leads.filter(l => l.digital_presence.website_status === 'Severely Outdated' || l.digital_presence.website_status === 'Needs Improvement').length;
 
   return (
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 p-6 rounded-3xl text-white border border-slate-800 shadow-card flex items-center justify-between gap-6 flex-wrap">
+      <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2.5 py-0.5 rounded-full">
-              Agency Digital Audit Matrix
+            <span className="text-[10px] uppercase font-bold tracking-wider bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] px-2.5 py-0.5 rounded-full">
+              Audit Intelligence
             </span>
-            <span className="text-xs text-slate-300">• {completedAuditsCount} Evaluated</span>
+            <span className="text-xs text-[#64748B]">• {leads.length} Medical Facilities Scored</span>
           </div>
-          <h1 className="text-2xl font-black text-white mt-1">
+          <h1 className="text-lg font-bold text-[#0F172A] mt-1 tracking-tight">
             Website Opportunity Intelligence Hub
           </h1>
-          <p className="text-xs text-slate-300 mt-0.5 max-w-2xl">
+          <p className="text-xs text-[#64748B] mt-0.5 max-w-2xl">
             Prioritize outreach based on quantified digital vulnerabilities: missing websites, mobile UX failures, legacy un-responsive platforms, and lack of patient conversion funnels.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800 shrink-0">
+        <div className="flex items-center gap-3 bg-[#F8FAFC] p-3 rounded-lg border border-[#E2E8F0] shrink-0 text-xs">
           <div className="text-center px-2">
-            <span className="text-[10px] text-slate-400 font-bold block">Prime Targets</span>
-            <span className="text-xl font-black text-rose-400">{highOppCount}</span>
+            <span className="text-[10px] text-[#64748B] font-bold block">Prime Targets (80%+)</span>
+            <span className="text-lg font-black text-[#B91C1C]">{highOppCount}</span>
           </div>
-          <div className="text-center px-2 border-l border-slate-800">
-            <span className="text-[10px] text-slate-400 font-bold block">No Website</span>
-            <span className="text-xl font-black text-red-400">{noSiteCount}</span>
+          <div className="text-center px-2 border-l border-[#E2E8F0]">
+            <span className="text-[10px] text-[#64748B] font-bold block">No Website</span>
+            <span className="text-lg font-black text-[#B91C1C]">{noSiteCount}</span>
+          </div>
+          <div className="text-center px-2 border-l border-[#E2E8F0]">
+            <span className="text-[10px] text-[#64748B] font-bold block">Needs Redesign</span>
+            <span className="text-lg font-black text-[#B45309]">{outdatedCount}</span>
           </div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-4 flex-wrap bg-white p-3 rounded-xl border border-[#E2E8F0] shadow-xs">
         
         {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-subtle text-xs font-semibold">
+        <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold">
           {[
-            { id: 'all', label: `All Leads (${leads.length})` },
-            { id: 'high_opp', label: `Highest Opportunity 80%+ (${highOppCount})` },
+            { id: 'all', label: `All Facilities (${leads.length})` },
+            { id: 'high_opp', label: `High Opportunity 80%+ (${highOppCount})` },
             { id: 'no_site', label: `No Website (${noSiteCount})` },
-            { id: 'outdated', label: `Outdated / Needs Work` }
+            { id: 'outdated', label: `Outdated / Needs Work (${outdatedCount})` }
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setFilterType(tab.id as any)}
-              className={`px-3 py-1.5 rounded-xl transition-all ${
+              className={`px-3 py-1.5 rounded-md transition-all ${
                 filterType === tab.id
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-[#2563EB] text-white shadow-xs'
+                  : 'bg-[#F8FAFC] text-[#64748B] hover:bg-[#F1F5F9] border border-[#E2E8F0]'
               }`}
             >
               {tab.label}
@@ -104,99 +106,145 @@ export function WebsiteAuditHubView() {
         </div>
 
         {/* Search */}
-        <div className="relative min-w-[260px]">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="relative min-w-[260px] max-w-sm flex-1">
+          <Search className="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search facility name or city..."
+            placeholder="Filter audit list..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 shadow-subtle focus:outline-none focus:border-blue-500"
+            className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg pl-9 pr-3 py-1.5 text-xs font-medium text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-[#2563EB]"
           />
         </div>
 
       </div>
 
-      {/* Ranked Audit Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Audit Matrix Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map(lead => {
           const b = lead.business;
           const dp = lead.digital_presence;
           const wa = lead.website_audit;
           const opp = getOpportunityLevel(wa?.opportunity_score ?? 50);
           const scoreBadge = getLeadScoreBadge(lead.lead.lead_score);
+          const webBadge = getWebsiteStatusBadge(dp.website_status);
+
+          const mobileUx = wa?.mobile_ux_score ?? (dp.website_status === 'No Website' ? 0 : 4);
+          const visualDesign = wa?.visual_design_score ?? (dp.website_status === 'No Website' ? 0 : 5);
+          const websiteUx = wa?.navigation_score ?? (dp.website_status === 'No Website' ? 0 : 5);
+          const conversion = (wa?.cta_score ?? (dp.website_status === 'No Website' ? 0 : 4));
 
           return (
             <div
               key={b.id}
-              onClick={() => openLeadDetail(b.id)}
-              className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-subtle hover:shadow-card hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer transition-all flex flex-col justify-between text-xs group"
+              className="bg-white rounded-xl border border-[#E2E8F0] shadow-xs hover:border-[#CBD5E1] transition-all p-4 flex flex-col justify-between group"
             >
               <div>
-                {/* Header opportunity meter */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`w-2.5 h-2.5 rounded-full ${opp.bgClass}`} />
-                    <span className="font-bold text-xs text-slate-900 dark:text-white">
-                      {wa?.opportunity_score ?? 50}% Opportunity
-                    </span>
-                  </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${opp.badgeClass}`}>
-                    {dp.website_status}
+                
+                {/* Header: Opportunity Tier & Lead Score */}
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${opp.badgeClass}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${opp.bgClass}`} />
+                    {opp.label} ({wa?.opportunity_score ?? 50}%)
+                  </span>
+
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0]">
+                    {b.state}
                   </span>
                 </div>
 
                 {/* Business Name */}
-                <h3 className="font-black text-sm text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                <h3 
+                  onClick={() => openLeadDetail(b.id)}
+                  className="font-bold text-sm text-[#0F172A] group-hover:text-[#2563EB] cursor-pointer transition-colors line-clamp-1 mb-1"
+                >
                   {b.business_name}
                 </h3>
-                <p className="text-slate-400 text-[11px] mt-0.5">
-                  {b.business_type} • {b.city}, {b.state}
+
+                <p className="text-[11px] text-[#64748B] mb-3">
+                  {b.business_type} • {b.city}
                 </p>
 
-                {/* Subscores mini grid */}
-                <div className="grid grid-cols-2 gap-2 my-4 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 text-[11px]">
+                {/* Section 16: Analytical Score Progress Bars */}
+                <div className="bg-[#F8FAFC] p-3 rounded-lg border border-[#E2E8F0] space-y-2 mb-3 text-xs">
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Mobile UX</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">
-                      {wa?.mobile_ux_score ?? 0}/10
-                    </span>
+                    <div className="flex justify-between text-[11px] mb-0.5">
+                      <span className="text-[#64748B]">Website UX</span>
+                      <span className="font-bold text-[#0F172A]">{websiteUx}/10</span>
+                    </div>
+                    <div className="w-full bg-[#E2E8F0] rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-[#2563EB] h-1.5 rounded-full" style={{ width: `${websiteUx * 10}%` }} />
+                    </div>
                   </div>
+
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Visual Design</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">
-                      {wa?.visual_design_score ?? 0}/10
-                    </span>
+                    <div className="flex justify-between text-[11px] mb-0.5">
+                      <span className="text-[#64748B]">Mobile UX</span>
+                      <span className="font-bold text-[#0F172A]">{mobileUx}/10</span>
+                    </div>
+                    <div className="w-full bg-[#E2E8F0] rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-[#D97706] h-1.5 rounded-full" style={{ width: `${mobileUx * 10}%` }} />
+                    </div>
                   </div>
+
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Speed / CWV</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">
-                      {wa?.loading_speed_score ?? 0}/10
-                    </span>
+                    <div className="flex justify-between text-[11px] mb-0.5">
+                      <span className="text-[#64748B]">Visual Design</span>
+                      <span className="font-bold text-[#0F172A]">{visualDesign}/10</span>
+                    </div>
+                    <div className="w-full bg-[#E2E8F0] rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-[#64748B] h-1.5 rounded-full" style={{ width: `${visualDesign * 10}%` }} />
+                    </div>
                   </div>
+
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Lead Score</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">
-                      ★ {lead.lead.lead_score}/10
-                    </span>
+                    <div className="flex justify-between text-[11px] mb-0.5">
+                      <span className="text-[#64748B]">Conversion Funnel</span>
+                      <span className="font-bold text-[#0F172A]">{conversion}/10</span>
+                    </div>
+                    <div className="w-full bg-[#E2E8F0] rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-[#B91C1C] h-1.5 rounded-full" style={{ width: `${conversion * 10}%` }} />
+                    </div>
                   </div>
                 </div>
 
-                {/* What we noticed teaser */}
-                {wa?.what_i_noticed && (
-                  <p className="text-slate-600 dark:text-slate-300 text-[11px] line-clamp-2 italic">
-                    "{wa.what_i_noticed}"
+                {/* Section 17: Prominent Opportunity Panel */}
+                <div className="p-3 rounded-lg bg-[#FFFBEB] border border-[#FDE68A] text-xs space-y-1 mb-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#B45309]">Recommended Service</span>
+                    <span className="text-[10px] font-bold text-[#B45309]">High Value</span>
+                  </div>
+                  <p className="font-bold text-xs text-[#0F172A]">
+                    {dp.website_status === 'No Website' ? 'Full Website Build & Booking Engine' : 'Website Redesign + Mobile UI/UX Optimization'}
                   </p>
-                )}
+                  <p className="text-[11px] text-[#475569]">
+                    {wa?.what_i_noticed 
+                      ? wa.what_i_noticed.slice(0, 90) + '...'
+                      : (dp.website_status === 'No Website' 
+                          ? 'Zero website footprint detected. Practice relies only on directory citations.' 
+                          : 'Poor mobile responsiveness, outdated branding, and missing online booking CTA.')}
+                  </p>
+                </div>
+
               </div>
 
-              {/* Footer action */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-slate-500">
-                <span className="text-[11px]">{lead.decision_makers.length} Decision Maker(s)</span>
-                <span className="text-blue-600 dark:text-blue-400 font-bold group-hover:underline inline-flex items-center gap-1">
-                  Open Audit <ChevronRight className="w-3.5 h-3.5" />
-                </span>
+              {/* Action Footer */}
+              <div className="pt-3 border-t border-[#F1F5F9] flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${webBadge.badgeClass}`}>
+                    <span className={`w-1 h-1 rounded-full ${webBadge.dotColor}`} />
+                    <span>{dp.website_status}</span>
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => openLeadDetail(b.id)}
+                  className="font-bold text-xs text-[#2563EB] hover:underline flex items-center gap-1"
+                >
+                  Audit Dossier <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
+
             </div>
           );
         })}

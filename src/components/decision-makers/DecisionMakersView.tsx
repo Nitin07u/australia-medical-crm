@@ -8,7 +8,6 @@ import {
   MapPin, 
   ExternalLink, 
   ShieldCheck,
-  Plus,
   Edit3
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
@@ -50,17 +49,17 @@ export function DecisionMakersView() {
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-card flex items-center justify-between gap-6 flex-wrap">
+      <div className="bg-white rounded-xl p-5 border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-lg font-bold text-[#0F172A] tracking-tight">
               Australian Medical Decision Makers Directory
             </h1>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
               {allDMs.length} Key Contacts
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#64748B] mt-0.5">
             Verified Hospital Directors, Medical Superintendents, CEOs, and Practice Managers.
           </p>
         </div>
@@ -68,13 +67,13 @@ export function DecisionMakersView() {
         <div className="flex items-center gap-3">
           {/* Search */}
           <div className="relative min-w-[280px]">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search contact, email, position, clinic..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 shadow-subtle focus:outline-none focus:border-blue-500"
+              className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg pl-9 pr-3 py-1.5 text-xs font-medium text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-[#2563EB]"
             />
           </div>
         </div>
@@ -84,10 +83,10 @@ export function DecisionMakersView() {
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
         <button
           onClick={() => setRoleFilter('all')}
-          className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 ${
+          className={`px-3 py-1.5 rounded-md font-semibold transition-all shrink-0 ${
             roleFilter === 'all'
-              ? 'bg-blue-600 text-white shadow-xs'
-              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50'
+              ? 'bg-[#2563EB] text-white shadow-xs'
+              : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
           }`}
         >
           All Roles ({allDMs.length})
@@ -100,10 +99,10 @@ export function DecisionMakersView() {
             <button
               key={r}
               onClick={() => setRoleFilter(r)}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 ${
+              className={`px-3 py-1.5 rounded-md font-medium transition-all shrink-0 ${
                 roleFilter === r
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50'
+                  ? 'bg-[#2563EB] text-white shadow-xs font-semibold'
+                  : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
               }`}
             >
               {r} ({count})
@@ -112,110 +111,120 @@ export function DecisionMakersView() {
         })}
       </div>
 
-      {/* Decision Makers Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Grid of Decision Makers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map(item => {
           const dm = item.decisionMaker;
 
           return (
             <div
               key={dm.id}
-              className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-subtle hover:shadow-card hover:border-blue-400 dark:hover:border-blue-600 transition-all flex flex-col justify-between text-xs group"
+              className="bg-white rounded-xl border border-[#E2E8F0] shadow-xs hover:border-[#CBD5E1] transition-all p-4 flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      dm.priority === 'Primary' ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}>
-                      {dm.priority} Decision Maker
-                    </span>
-                    <h3 className="font-black text-base text-slate-900 dark:text-white mt-2 group-hover:text-blue-600 transition-colors">
-                      {dm.full_name}
-                    </h3>
-                    <p className="text-slate-500 font-medium text-xs">{dm.position}</p>
-                  </div>
+                
+                {/* Top Role & Verification Badge */}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
+                    {dm.role_type}
+                  </span>
 
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
-                      {dm.email_verification_status}
-                    </span>
-
-                    <button
-                      onClick={() => setEditingDm({
-                        businessId: item.businessId,
-                        businessName: item.businessName,
-                        decisionMaker: dm
-                      })}
-                      title="Edit Profile & Email"
-                      className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-500 hover:text-blue-600 transition-colors"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                    dm.email_verification_status === 'Verified'
+                      ? 'bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]'
+                      : 'bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]'
+                  }`}>
+                    <ShieldCheck className="w-3 h-3" />
+                    <span>{dm.email_verification_status || 'Verified'}</span>
+                  </span>
                 </div>
 
-                {/* Linked Medical Facility */}
+                {/* Name and Position */}
+                <h3 className="font-bold text-sm text-[#0F172A] group-hover:text-[#2563EB] transition-colors line-clamp-1 mb-0.5">
+                  {dm.full_name}
+                </h3>
+                <p className="text-xs text-[#64748B] font-medium mb-3 line-clamp-1">
+                  {dm.position}
+                </p>
+
+                {/* Business Facility Card */}
                 <div 
                   onClick={() => openLeadDetail(item.businessId)}
-                  className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 mb-3 space-y-1 cursor-pointer hover:border-blue-300 transition-colors"
+                  className="bg-[#F8FAFC] p-2.5 rounded-lg border border-[#E2E8F0] hover:border-[#CBD5E1] cursor-pointer transition-all mb-3 text-xs"
                 >
-                  <span className="text-[10px] uppercase font-bold text-slate-400">Medical Facility</span>
-                  <p className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate flex items-center gap-1.5">
-                    <Building2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                    {item.businessName}
-                  </p>
-                  <p className="text-[11px] text-slate-400 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-slate-400" />
-                    State: <strong>{item.state}</strong>
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-[#0F172A] truncate flex-1">{item.businessName}</p>
+                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-white text-[#475569] border border-[#E2E8F0] ml-2 shrink-0">
+                      {item.state}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#64748B] truncate mt-0.5">
+                    {item.businessType} • {item.city}
                   </p>
                 </div>
 
-                {/* Contact details */}
-                <div className="space-y-1.5 text-slate-600 dark:text-slate-300 pt-1">
-                  {dm.email && (
-                    <p className="flex items-center gap-2 font-mono text-[11px] truncate">
-                      <Mail className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                {/* Contact Coordinates */}
+                <div className="space-y-1.5 text-xs">
+                  {dm.email ? (
+                    <a
+                      href={`mailto:${dm.email}`}
+                      className="flex items-center gap-2 text-[#2563EB] hover:underline font-mono text-[11px] truncate"
+                    >
+                      <Mail className="w-3.5 h-3.5 shrink-0 text-[#2563EB]" />
                       <span className="truncate">{dm.email}</span>
-                    </p>
+                    </a>
+                  ) : (
+                    <span className="text-[#94A3B8] italic text-[11px] flex items-center gap-2">
+                      <Mail className="w-3.5 h-3.5 text-[#CBD5E1]" /> No direct email recorded
+                    </span>
                   )}
+
                   {dm.phone && (
-                    <p className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <a
+                      href={`tel:${dm.phone}`}
+                      className="flex items-center gap-2 text-[#475569] hover:text-[#0F172A] text-[11px]"
+                    >
+                      <Phone className="w-3.5 h-3.5 shrink-0 text-[#64748B]" />
                       <span>{dm.phone}</span>
-                    </p>
+                    </a>
                   )}
+
                   {dm.linkedin_url && (
-                    <p className="flex items-center gap-2">
-                      <ExternalLink className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                      <a href={dm.linkedin_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate">
-                        LinkedIn Profile
-                      </a>
-                    </p>
+                    <a
+                      href={dm.linkedin_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 text-[#2563EB] hover:underline text-[11px]"
+                    >
+                      <ExternalLink className="w-3 h-3 text-[#2563EB]" />
+                      <span>LinkedIn Profile</span>
+                    </a>
                   )}
                 </div>
+
               </div>
 
-              {/* Footer */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-slate-500">
+              {/* Action Footer */}
+              <div className="pt-3 mt-3 border-t border-[#F1F5F9] flex items-center justify-between text-xs">
                 <button
                   onClick={() => setEditingDm({
                     businessId: item.businessId,
                     businessName: item.businessName,
                     decisionMaker: dm
                   })}
-                  className="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-blue-600 flex items-center gap-1"
+                  className="inline-flex items-center gap-1 text-[#2563EB] hover:underline font-semibold"
                 >
                   <Edit3 className="w-3 h-3" /> Edit Mail & Profile
                 </button>
 
                 <button
                   onClick={() => openLeadDetail(item.businessId)}
-                  className="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"
+                  className="text-[#64748B] hover:text-[#0F172A] font-semibold"
                 >
                   Open Dossier →
                 </button>
               </div>
+
             </div>
           );
         })}

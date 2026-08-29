@@ -237,6 +237,7 @@ export type SortField =
   | 'state'
   | 'city'
   | 'website_status'
+  | 'lead_status'
   | 'opportunity_score'
   | 'created_at';
 
@@ -291,3 +292,17 @@ export interface ImportValidationResult {
   isDuplicate: boolean;
   duplicateReason?: string;
 }
+
+export type ActiveRoute = 
+  | 'dashboard'
+  | 'leads'
+  | 'hospitals'
+  | 'clinics'
+  | 'medical-centres'
+  | 'medical-equipment'
+  | 'website-audit'
+  | 'decision-makers'
+  | 'tasks'
+  | 'import-leads'
+  | 'settings'
+  | 'lead-detail';

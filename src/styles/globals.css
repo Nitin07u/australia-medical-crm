@@ -2,79 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-bg: #FFFFFF;
-  --color-bg-alt: #F8FAFC;
-  --color-card: #FFFFFF;
-  --color-text-primary: #1E293B;
-  --color-text-secondary: #64748B;
-  --color-text-muted: #94A3B8;
-  --color-border: #EAEFF5;
-  --color-border-strong: #CBD5E1;
-  --color-accent: #2563EB;
-  --color-accent-hover: #1D4ED8;
+@layer base {
+  :root {
+    --color-navy: #0B1220;
+    --color-electric: #2563EB;
+    --color-bg: #F8FAFC;
+    --color-card: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-muted: #94A3B8;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
 }
 
-.dark {
-  --color-bg: #0B0F19;
-  --color-bg-alt: #111827;
-  --color-card: #151E2E;
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
-  --color-border: #1E293B;
-  --color-border-strong: #334155;
-  --color-accent: #3B82F6;
-  --color-accent-hover: #2563EB;
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-html {
-  scroll-behavior: smooth;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
-  overflow-x: hidden;
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
 }
 
-/* Editorial Serif font style matching reference */
-.font-editorial {
-  font-family: 'Newsreader', 'EB Garamond', Georgia, serif;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
-/* Hanging cord/thread texture */
-.hanging-string {
-  background: linear-gradient(
-    to bottom,
-    rgba(175, 150, 115, 0.9) 0%,
-    rgba(190, 165, 128, 0.95) 75%,
-    rgba(150, 125, 90, 1) 100%
-  );
-  box-shadow: 0.5px 0 1px rgba(0, 0, 0, 0.12);
+/* Status Pill Utilities */
+.badge-status-success {
+  background-color: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
 }
 
-.dark .hanging-string {
-  background: linear-gradient(
-    to bottom,
-    rgba(215, 190, 150, 0.8) 0%,
-    rgba(230, 205, 165, 0.9) 75%,
-    rgba(185, 160, 120, 1) 100%
-  );
+.badge-status-warning {
+  background-color: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
 }
 
-/* Precise card shadow */
-.card-shadow {
-  box-shadow: 0 2px 12px -2px rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
-}
-.card-shadow:hover {
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.07), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+.badge-status-danger {
+  background-color: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
 }
 
-.card-selected-shadow {
-  box-shadow: 0 8px 28px -4px rgba(37, 99, 235, 0.12), 0 2px 8px -2px rgba(37, 99, 235, 0.06);
+.badge-status-neutral {
+  background-color: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
 }

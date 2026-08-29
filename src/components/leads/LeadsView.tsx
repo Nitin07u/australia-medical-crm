@@ -11,6 +11,7 @@ import {
   Search
 } from 'lucide-react';
 import { useLeads } from '../../context/LeadContext';
+import { AustralianState, BusinessType, WebsiteStatus } from '../../types';
 import { LeadTable } from './LeadTable';
 import { LeadKanbanBoard } from './LeadKanbanBoard';
 import { LeadFiltersDrawer } from './LeadFiltersDrawer';
@@ -32,66 +33,66 @@ export function LeadsView() {
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
 
   return (
-    <div className="p-6 space-y-5 max-w-[1600px] mx-auto">
+    <div className="p-6 space-y-4 max-w-[1600px] mx-auto">
       
       {/* Header bar with View Mode Switcher and Quick Actions */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-lg font-bold text-[#0F172A] tracking-tight">
               Medical Leads CRM Directory
             </h1>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800">
+            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
               {filteredLeads.length} of {leads.length} Leads
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#64748B] mt-0.5">
             Search, qualify, manage website audits, and discover decision makers across Australia.
           </p>
         </div>
 
         {/* View Switcher & Action buttons */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           {/* Table / Kanban Toggle */}
-          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center border border-slate-200 dark:border-slate-700">
+          <div className="bg-[#F1F5F9] p-0.5 rounded-lg flex items-center border border-[#E2E8F0]">
             <button
               onClick={() => setViewMode('table')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-white text-[#0F172A] shadow-xs'
+                  : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
             >
               <Table className="w-3.5 h-3.5" />
-              <span>Table View</span>
+              <span>Table</span>
             </button>
 
             <button
               onClick={() => setViewMode('kanban')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
                 viewMode === 'kanban'
-                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-white text-[#0F172A] shadow-xs'
+                  : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
             >
               <Kanban className="w-3.5 h-3.5" />
-              <span>Pipeline Board</span>
+              <span>Pipeline</span>
             </button>
           </div>
 
           {/* Filter Drawer Button */}
           <button
             onClick={() => setIsFilterDrawerOpen(true)}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-1.5 h-9 px-3 rounded-lg text-xs font-medium border transition-colors ${
               activeFilterCount > 0
-                ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-300'
-                : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-50'
+                ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]'
+                : 'bg-white text-[#475569] border-[#E2E8F0] hover:bg-[#F8FAFC]'
             }`}
           >
             <Filter className="w-3.5 h-3.5" />
             <span>Filters</span>
             {activeFilterCount > 0 && (
-              <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[10px] flex items-center justify-center font-bold">
+              <span className="w-4 h-4 rounded-full bg-[#2563EB] text-white text-[10px] flex items-center justify-center font-bold">
                 {activeFilterCount}
               </span>
             )}
@@ -100,9 +101,9 @@ export function LeadsView() {
           {/* Add Lead Button */}
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm shadow-blue-600/30 transition-all"
+            className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-xs active:scale-[0.98] transition-all"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Add Lead</span>
           </button>
         </div>
@@ -110,85 +111,60 @@ export function LeadsView() {
 
       {/* Active Filter Chips */}
       {activeFilterCount > 0 && (
-        <div className="flex items-center gap-2 flex-wrap text-xs pt-1">
-          <span className="text-slate-400 font-medium text-[11px]">Active Filters:</span>
-          
-          {filters.states.map(st => (
-            <span key={st} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-semibold">
+        <div className="flex items-center gap-2 flex-wrap text-xs bg-white p-2.5 rounded-lg border border-[#E2E8F0]">
+          <span className="font-semibold text-[#64748B]">Active Filters:</span>
+
+          {filters.states.map((st: AustralianState) => (
+            <span key={st} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] font-medium text-[11px]">
               State: {st}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-blue-900" 
-                onClick={() => setFilters(prev => ({ ...prev, states: prev.states.filter(s => s !== st) }))} 
-              />
+              <X className="w-3 h-3 cursor-pointer hover:text-[#0F172A]" onClick={() => setFilters(prev => ({ ...prev, states: prev.states.filter(s => s !== st) }))} />
             </span>
           ))}
 
-          {filters.businessTypes.map(bt => (
-            <span key={bt} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-[11px] font-semibold">
+          {filters.businessTypes.map((bt: BusinessType) => (
+            <span key={bt} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] font-medium text-[11px]">
               Type: {bt}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-indigo-900" 
-                onClick={() => setFilters(prev => ({ ...prev, businessTypes: prev.businessTypes.filter(t => t !== bt) }))} 
-              />
+              <X className="w-3 h-3 cursor-pointer hover:text-[#0F172A]" onClick={() => setFilters(prev => ({ ...prev, businessTypes: prev.businessTypes.filter(t => t !== bt) }))} />
             </span>
           ))}
 
-          {filters.websiteStatuses.map(ws => (
-            <span key={ws} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-semibold">
+          {filters.websiteStatuses.map((ws: WebsiteStatus) => (
+            <span key={ws} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] font-medium text-[11px]">
               Website: {ws}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-rose-900" 
-                onClick={() => setFilters(prev => ({ ...prev, websiteStatuses: prev.websiteStatuses.filter(s => s !== ws) }))} 
-              />
-            </span>
-          ))}
-
-          {filters.leadStatuses.map(ls => (
-            <span key={ls} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold">
-              Status: {ls}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-emerald-900" 
-                onClick={() => setFilters(prev => ({ ...prev, leadStatuses: prev.leadStatuses.filter(s => s !== ls) }))} 
-              />
+              <X className="w-3 h-3 cursor-pointer hover:text-[#0F172A]" onClick={() => setFilters(prev => ({ ...prev, websiteStatuses: prev.websiteStatuses.filter(w => w !== ws) }))} />
             </span>
           ))}
 
           {filters.scoreRange && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[11px] font-semibold">
-              Score: {filters.scoreRange[0]}-{filters.scoreRange[1]}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-purple-900" 
-                onClick={() => setFilters(prev => ({ ...prev, scoreRange: undefined }))} 
-              />
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] font-medium text-[11px]">
+              Score: {filters.scoreRange[0]}–{filters.scoreRange[1]}
+              <X className="w-3 h-3 cursor-pointer hover:text-[#0F172A]" onClick={() => setFilters(prev => ({ ...prev, scoreRange: undefined }))} />
             </span>
           )}
 
-          {filters.decisionMakerFound !== null && filters.decisionMakerFound !== undefined && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 text-[11px] font-semibold">
+          {filters.decisionMakerFound !== undefined && filters.decisionMakerFound !== null && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#F0FDFA] text-[#0D9488] border border-[#CCFBF1] font-medium text-[11px]">
               DM: {filters.decisionMakerFound ? 'Found' : 'Not Found'}
-              <X 
-                className="w-3 h-3 cursor-pointer hover:text-cyan-900" 
-                onClick={() => setFilters(prev => ({ ...prev, decisionMakerFound: null }))} 
-              />
+              <X className="w-3 h-3 cursor-pointer hover:text-[#0F172A]" onClick={() => setFilters(prev => ({ ...prev, decisionMakerFound: undefined }))} />
             </span>
           )}
 
           <button
             onClick={resetFilters}
-            className="text-[11px] text-blue-600 hover:underline font-bold ml-1"
+            className="text-[11px] font-semibold text-[#B91C1C] hover:underline ml-auto"
           >
-            Clear all
+            Clear all filters
           </button>
         </div>
       )}
 
-      {/* Render Table or Kanban View */}
+      {/* Main View Area (Table or Kanban) */}
       {viewMode === 'table' ? <LeadTable /> : <LeadKanbanBoard />}
 
-      {/* Filter Drawer Modal */}
+      {/* Slide-out Filters Drawer */}
       <LeadFiltersDrawer />
 
-      {/* Floating Bulk Actions Bar */}
+      {/* Floating Bulk Action Bar */}
       <BulkActionBar />
 
     </div>
