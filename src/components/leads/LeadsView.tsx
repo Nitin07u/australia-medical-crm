@@ -33,7 +33,7 @@ export function LeadsView() {
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
 
   return (
-    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1600px] mx-auto">
+    <div className="px-6 md:px-7 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Page Header Section */}
       <div>

@@ -87,7 +87,7 @@ export function CategoryView({ category, title, subtitle }: CategoryViewProps) {
   const states = ['all', 'NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'];
 
   return (
-    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1600px] mx-auto">
+    <div className="px-6 md:px-7 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Category Hero Banner */}
       <div className="rounded-xl bg-white p-5 border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-6 flex-wrap">

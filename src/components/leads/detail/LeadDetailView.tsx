@@ -203,7 +203,7 @@ export function LeadDetailView() {
   };
 
   return (
-    <div className="pt-8 px-7 pb-8 space-y-6 max-w-[1500px] mx-auto">
+    <div className="px-6 md:px-7 space-y-6 max-w-[1500px] mx-auto">
       
       {/* Back to Leads Navigation Bar */}
       <div className="flex items-center justify-between">

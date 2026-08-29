@@ -84,7 +84,7 @@ function MainContent() {
       {/* Main View Area */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
         <TopNav />
-        <main className="flex-1 pb-16">
+        <main className="flex-1 pb-16 pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16">
           {renderActiveRoute()}
         </main>
       </div>
