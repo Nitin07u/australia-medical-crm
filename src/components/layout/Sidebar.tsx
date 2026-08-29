@@ -86,12 +86,12 @@ export function Sidebar() {
         <div className="h-16 px-4 flex items-center justify-between border-b border-[#1E293B]">
           {!isCollapsed ? (
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white shadow-sm shrink-0">
-                <Activity className="w-4 h-4 stroke-[2.5]" />
+              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center p-1 shadow-sm shrink-0 border border-[#1E293B]">
+                <img src="/healthintel-logo.png" alt="healthIntel" className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-[14px] text-white tracking-tight">MedLead AU</span>
+                  <span className="font-bold text-[15px] text-white tracking-tight">healthIntel</span>
                   <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-[#2563EB]/20 text-blue-400 border border-blue-500/30">
                     B2B
                   </span>
@@ -100,8 +100,8 @@ export function Sidebar() {
               </div>
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center text-white mx-auto shadow-sm">
-              <Activity className="w-4 h-4 stroke-[2.5]" />
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center mx-auto p-1 shadow-sm border border-[#1E293B]">
+              <img src="/healthintel-logo.png" alt="healthIntel" className="w-full h-full object-contain" />
             </div>
           )}
 

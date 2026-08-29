@@ -63,7 +63,7 @@ export function SettingsView() {
     });
   };
 
-  const sqlSchemaSnippet = `-- MedLead AU - Complete 9 Table Supabase DDL
+  const sqlSchemaSnippet = `-- healthIntel - Complete 9 Table Supabase DDL
 CREATE TABLE IF NOT EXISTS businesses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   business_name VARCHAR(255) NOT NULL,

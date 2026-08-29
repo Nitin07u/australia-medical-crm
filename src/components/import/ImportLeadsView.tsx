@@ -451,7 +451,7 @@ export function ImportLeadsView() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-[#0F172A]">Map CSV Columns to CRM Fields</h3>
-              <p className="text-xs text-[#64748B]">Match headers from your file to MedLead AU database properties</p>
+              <p className="text-xs text-[#64748B]">Match headers from your file to healthIntel database properties</p>
             </div>
             <button
               onClick={handleValidate}
@@ -550,7 +550,7 @@ export function ImportLeadsView() {
 
           <div>
             <h3 className="font-bold text-base text-[#0F172A]">
-              {importProgress === 100 ? 'Import Completed Successfully!' : 'Importing Leads into MedLead CRM...'}
+              {importProgress === 100 ? 'Import Completed Successfully!' : 'Importing Leads into healthIntel CRM...'}
             </h3>
             <p className="text-xs text-[#64748B] mt-1">
               {importProgress === 100 ? `Added ${importedCount} medical leads with opportunity scores.` : 'Ingesting records and computing website opportunity matrix...'}

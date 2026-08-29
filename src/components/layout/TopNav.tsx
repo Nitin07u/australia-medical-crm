@@ -54,7 +54,7 @@ export function TopNav() {
       case 'lead-detail':
         return { section: 'Leads', page: 'Facility Profile Dossier' };
       default:
-        return { section: 'CRM', page: 'MedLead AU' };
+        return { section: 'CRM', page: 'healthIntel' };
     }
   };
 
@@ -66,7 +66,7 @@ export function TopNav() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `medlead_australia_leads_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `healthintel_australia_leads_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

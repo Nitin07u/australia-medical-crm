@@ -1,4 +1,4 @@
-// TypeScript definitions for MedLead AU - Australian Medical Business Lead Intelligence
+// TypeScript definitions for healthIntel - Australian Medical Business Lead Intelligence
 
 export type AustralianState = 'NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT';
 
